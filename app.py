@@ -18,7 +18,7 @@ def index():
         del dict['num_bikes_available_types']
         return dict
     details = [reformatDict(detail) for detail in details]
-    df_details = pd.DataFrame(data=details).drop(columns=['is_installed','is_returning','is_renting','numDocksAvailable','numBikesAvailable','num_bikes_available','stationCode'])
+    df_details = pd.DataFrame(data=details).drop(columns=['is_installed','is_returning','is_renting','numDocksAvailable','numBikesAvailable','num_bikes_available','stationCode','rental_methods'])
     df_final = pd.merge(df_loc,df_details,how='inner',left_on='station_id',right_on='station_id')
     try:
         limit = int(request.args.get('limit'))
@@ -27,4 +27,4 @@ def index():
     if limit==0 or limit is None or limit>=len(df_final): 
         return jsonify(df_final.to_dict('records'))
     else:
-        return jsonify({'total':len(df_final.iloc[:limit].to_dict('records')),'data':df_final.iloc[:limit].to_dict('records')})
+        return jsonify(df_final.iloc[:limit].to_dict('records'))
